@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Product } from "../types";
 import { generateProductPDF } from "../utils/pdfGenerator";
+import ProductImage from "./ProductImage";
 
 interface ProductDetailModalProps {
   product: Product;
@@ -121,11 +122,13 @@ export default function ProductDetailModal({
                       isZoomed ? "scale-125" : ""
                     }`}
                   >
-                    <img
+                    <ProductImage
                       src={product.images[activeImageIdx]}
                       alt={product.name}
-                      referrerPolicy="no-referrer"
+                      language={language}
+                      size="lg"
                       className="w-full h-full object-contain max-h-[300px]"
+                      containerClassName="w-full h-full flex flex-col items-center justify-center"
                     />
                   </div>
                   <div className="absolute top-2 right-2 p-1.5 bg-black/40 text-white rounded-md text-[10px] flex items-center space-x-1 pointer-events-none">
@@ -198,7 +201,13 @@ export default function ProductDetailModal({
                       activeImageIdx === idx ? "border-brand-blue scale-105" : "border-transparent opacity-60 hover:opacity-100"
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <ProductImage
+                      src={img}
+                      alt=""
+                      language={language}
+                      size="sm"
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
@@ -377,8 +386,15 @@ export default function ProductDetailModal({
                       onClick={() => onProductSelect(rel)}
                       className="flex items-center space-x-2.5 p-2 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-800 cursor-pointer border border-slate-200/20 transition"
                     >
-                      <div className="h-10 w-10 rounded-lg overflow-hidden shrink-0">
-                        <img src={rel.images[0]} alt="" className="w-full h-full object-cover" />
+                      <div className="h-10 w-10 rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
+                        <ProductImage
+                          src={rel.images[0]}
+                          alt=""
+                          language={language}
+                          size="sm"
+                          className="w-full h-full object-cover"
+                          containerClassName="w-full h-full flex flex-col items-center justify-center"
+                        />
                       </div>
                       <div className="min-w-0">
                         <h5 className="text-[11px] font-semibold text-slate-800 dark:text-slate-100 truncate">{rel.name}</h5>

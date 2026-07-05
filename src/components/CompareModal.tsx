@@ -7,6 +7,7 @@ import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X, Check, ShieldCheck, ShoppingBag, ArrowRight } from "lucide-react";
 import { Product } from "../types";
+import ProductImage from "./ProductImage";
 
 interface CompareModalProps {
   compareList: Product[];
@@ -80,11 +81,16 @@ export default function CompareModal({
                           <X className="h-3 w-3" />
                         </button>
                         <div className="flex flex-col space-y-2 pr-4">
-                          <img
-                            src={product.images[0]}
-                            alt=""
-                            className="h-24 w-24 object-cover rounded-xl shadow-md border border-slate-200/30"
-                          />
+                          <div className="h-24 w-24 rounded-xl overflow-hidden shadow-md border border-slate-200/30 flex items-center justify-center bg-slate-50 dark:bg-slate-950">
+                            <ProductImage
+                              src={product.images[0]}
+                              alt=""
+                              language={language}
+                              size="md"
+                              className="w-full h-full object-cover"
+                              containerClassName="w-full h-full flex flex-col items-center justify-center"
+                            />
+                          </div>
                           <span className="text-[10px] text-brand-blue uppercase font-mono font-bold">{product.category}</span>
                           <span className="font-bold line-clamp-1">{product.name}</span>
                         </div>

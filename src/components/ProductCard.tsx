@@ -7,6 +7,7 @@ import React from "react";
 import { motion } from "motion/react";
 import { Star, Eye, ClipboardList, Heart, Sparkles, AlertCircle } from "lucide-react";
 import { Product } from "../types";
+import ProductImage from "./ProductImage";
 
 interface ProductCardProps {
   product: Product;
@@ -42,12 +43,14 @@ export default function ProductCard({
       className="group relative flex flex-col rounded-3xl overflow-hidden glass-light dark:glass-dark border border-slate-200/50 dark:border-slate-800/60 shadow-xl hover:shadow-2xl transition-all"
     >
       {/* Upper Media Deck */}
-      <div className="relative h-56 w-full bg-slate-100 dark:bg-slate-950 overflow-hidden">
-        <img
+      <div className="relative h-56 w-full bg-slate-100 dark:bg-slate-950 overflow-hidden flex items-center justify-center">
+        <ProductImage
           src={product.images[0]}
           alt={product.name}
-          referrerPolicy="no-referrer"
+          language={language}
+          size="md"
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+          containerClassName="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-950"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-350"></div>
 

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Product, Inquiry, DealerApplication } from "../types";
 import { generateInquiryPDF } from "../utils/pdfGenerator";
+import ProductImage from "./ProductImage";
 
 interface InquiryFormProps {
   inquiryCart: { product: Product; quantity: number }[];
@@ -417,11 +418,16 @@ export default function InquiryForm({
                         className="p-3.5 rounded-2xl glass-light dark:glass-dark border border-slate-200/30 dark:border-slate-800/40 flex items-center justify-between"
                       >
                         <div className="flex items-center space-x-3 min-w-0">
-                          <img
-                            src={product.images[0]}
-                            alt=""
-                            className="h-10 w-10 rounded-lg object-cover border border-slate-200/40"
-                          />
+                          <div className="h-10 w-10 rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
+                            <ProductImage
+                              src={product.images[0]}
+                              alt=""
+                              language={language}
+                              size="sm"
+                              className="w-full h-full object-cover"
+                              containerClassName="w-full h-full flex flex-col items-center justify-center bg-slate-100 dark:bg-slate-950"
+                            />
+                          </div>
                           <div className="min-w-0">
                             <h4 className="text-[11px] font-semibold text-slate-800 dark:text-slate-100 truncate pr-2" title={product.name}>
                               {product.name}

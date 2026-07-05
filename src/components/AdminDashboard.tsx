@@ -11,6 +11,7 @@ import {
   BellRing, Download, Eye, ExternalLink, Calendar
 } from "lucide-react";
 import { Product, Inquiry, DealerApplication } from "../types";
+import ProductImage from "./ProductImage";
 
 interface AdminDashboardProps {
   products: Product[];
@@ -627,7 +628,16 @@ export default function AdminDashboard({
                       {products.map((p) => (
                         <tr key={p.id} className="hover:bg-slate-50 dark:hover:bg-slate-950/20">
                           <td className="py-3.5 px-2">
-                            <img src={p.images[0]} alt="" className="h-8 w-8 rounded-lg object-cover border border-slate-200/40" />
+                            <div className="h-8 w-8 rounded-lg overflow-hidden border border-slate-200/40 flex items-center justify-center bg-slate-50 dark:bg-slate-950">
+                              <ProductImage
+                                src={p.images[0]}
+                                alt=""
+                                language={language}
+                                size="sm"
+                                className="w-full h-full object-cover"
+                                containerClassName="w-full h-full flex flex-col items-center justify-center"
+                              />
+                            </div>
                           </td>
                           <td className="py-3.5 px-2 font-semibold text-slate-800 dark:text-slate-100">{p.name}</td>
                           <td className="py-3.5 px-2">
