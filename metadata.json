@@ -1,0 +1,6 @@
+{
+  "name": "Shri Shiv Enterprises",
+  "description": "Premium mobile catalog, inquiry management, and AI-powered product recommendation platform for Shri Shiv Enterprises, India's leading notebook and stationery manufacturer.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
