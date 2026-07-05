@@ -15,7 +15,7 @@ const isESM = typeof import.meta !== "undefined" && typeof import.meta.url !== "
 const currentFilePath = isESM ? fileURLToPath(import.meta.url) : (typeof __filename !== "undefined" ? __filename : "");
 const currentDirPath = isESM ? path.dirname(currentFilePath) : (typeof __dirname !== "undefined" ? __dirname : "");
 
-const app = express();
+export const app = express();
 const PORT = 3000;
 
 app.use(express.json());
@@ -30,7 +30,13 @@ interface Database {
   reviews: any[];
 }
 
+let memoryDb: Database | null = null;
+
 function getDatabase(): Database {
+  if (memoryDb) {
+    return memoryDb;
+  }
+
   if (!fs.existsSync(DB_PATH)) {
     const initialDb: Database = {
       products: INITIAL_PRODUCTS,
@@ -38,12 +44,18 @@ function getDatabase(): Database {
       dealers: [],
       reviews: INITIAL_REVIEWS,
     };
-    fs.writeFileSync(DB_PATH, JSON.stringify(initialDb, null, 2), "utf-8");
+    try {
+      fs.writeFileSync(DB_PATH, JSON.stringify(initialDb, null, 2), "utf-8");
+    } catch (e) {
+      console.warn("Could not write initial db.json to file system, using in-memory database.", e);
+    }
+    memoryDb = initialDb;
     return initialDb;
   }
   try {
     const content = fs.readFileSync(DB_PATH, "utf-8");
-    return JSON.parse(content);
+    memoryDb = JSON.parse(content);
+    return memoryDb!;
   } catch (e) {
     console.error("Error reading database, resetting...", e);
     const initialDb: Database = {
@@ -52,13 +64,23 @@ function getDatabase(): Database {
       dealers: [],
       reviews: INITIAL_REVIEWS,
     };
-    fs.writeFileSync(DB_PATH, JSON.stringify(initialDb, null, 2), "utf-8");
+    try {
+      fs.writeFileSync(DB_PATH, JSON.stringify(initialDb, null, 2), "utf-8");
+    } catch (err) {
+      console.warn("Could not write reset db.json to file system, using in-memory database.", err);
+    }
+    memoryDb = initialDb;
     return initialDb;
   }
 }
 
 function saveDatabase(db: Database) {
-  fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2), "utf-8");
+  memoryDb = db;
+  try {
+    fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2), "utf-8");
+  } catch (e) {
+    console.warn("Could not write db.json to file system (expected on read-only environments like Vercel). Using in-memory fallback.", e);
+  }
 }
 
 // Lazy Initialize Gemini API Client
@@ -477,9 +499,11 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+  if (!process.env.VERCEL) {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  }
 }
 
 startServer();
