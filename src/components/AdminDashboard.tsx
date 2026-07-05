@@ -85,6 +85,11 @@ export default function AdminDashboard({
   useEffect(() => {
     if (isAuthenticated) {
       loadDatabaseData();
+      // Setup polling interval to fetch inquiries and dealers "time to time" (every 10 seconds)
+      const interval = setInterval(() => {
+        loadDatabaseData();
+      }, 10000);
+      return () => clearInterval(interval);
     }
   }, [isAuthenticated]);
 
@@ -294,8 +299,9 @@ export default function AdminDashboard({
           {/* Dashboard Hub Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200/40 dark:border-slate-800/40 pb-5">
             <div>
-              <span className="text-[10px] bg-emerald-500/10 text-emerald-500 px-3 py-1 rounded-full font-mono font-bold uppercase tracking-wider">
-                System Session: Live & Secure
+              <span className="text-[10px] bg-emerald-500/10 text-emerald-500 px-3 py-1 rounded-full font-mono font-bold uppercase tracking-wider inline-flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                {language === "en" ? "System Session: Live & Secure (Auto-Refresh 10s)" : "सिस्टम सत्र: लाइव और सुरक्षित (ऑटो-रिफ्रेश 10s)"}
               </span>
               <h2 className="font-display font-bold text-xl md:text-2xl text-slate-900 dark:text-white mt-2">
                 Shri Shiv Corporate Operations Suite
